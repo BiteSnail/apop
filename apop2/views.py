@@ -8,4 +8,4 @@ class MyLoginRequiredMixin(LoginRequiredMixin):
 
 
 class HomeView(TemplateView, MyLoginRequiredMixin):
-    template_name='base.html'
+    template_name='main.html'

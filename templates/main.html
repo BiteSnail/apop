@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% load static %}
+
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>조기진통 감지 및 스트레스 완화</title>
+    </head>
+
+    <body>
+        {% include 'header.html' %}
+
+        <body>
+            {% block content %}
+            <div class="container py-5">
+            <div class="p-5 mb-4 bg-body-tertiary rounded-3 text-center">
+
+                <img src="{% static 'IC_LOGO.png' %}" width="300" height="400" alt="중견연구 아이콘" />
+                <h1 class="display-5 fst_italic" style="margin-top: 2rem;">소개</h1>
+                <p class="lead my-3" style="font-size: 1.5rem;">
+                    본 사이트는 임부의 조기진통 의심 증상과 비전형적 이상징후와 관련요인을 일상생활 속에서 상시 모니터링하고, 관리가 필요한 임부가 가정이나 직장에서도 서비스를 제공받을 수 있도록 하는 통합관리 앱입니다.
+
+
+                <p class="lead my-3" style="font-size: 2rem;">
+                    <p class="lead my-3" style="font-size: 2rem;">
+
+
+                <div class="lh-1 fw-light text-body-secondary" style="margin-top: 5rem; font-size: 1.5rem;">
+                    [설문조사] 탭에서 각각의 설문을 시행하면 증상에 맞는 관리 가이드를 얻을 수 있습니다.
+                </div>
+                <a href="{% url 'survey:survey-list' %}" class="btn btn-lg btn-dark mt-4">
+                    설문조사하러 가기
+                </a>
+            </div>
+            </div>
+
+
+
+            {% endblock content %}
+        </body>
+
+        <div class="container">
+            {% include 'footer.html' %}
+        </div>
+    </body>
+
+</html>

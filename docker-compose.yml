@@ -1,56 +1,68 @@
-version: "3.7"
 services:
   nginx:
     image: nginx:1.25.3
     networks:
       - network
+    restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./static:/data/static
     ports:
-      - 80:80
+      - '443:80'
     depends_on:
-      - apop
+      - 'apop'
   
   apop:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: apop
+    container_name: 'apop'
+    restart: always
     networks:
       - network
     volumes:
       - ./static:/djangoproject/static
     command: >
       bash -c "
+      python3 manage.py makemigrations survey huami accounts&&
       python3 manage.py migrate&& 
-      gunicorn apop2.wsgi -b 0.0.0.0:8000"
+      gunicorn apop2.wsgi --workers 4 -b 0.0.0.0:8000"
     ports:
       - "8000:8000"
     expose:
       - "8000"
     depends_on:
-      - db
+      - 'db'
+    environment:
+      CSRF_TRUSTED_ORIGINS: ''
+      AUTH_KEY: ''
   
   db:
-    image: mariadb:11.1.3
+    build:
+      context: ./mariadb
+      dockerfile: ./Dockerfile
     restart: always
     container_name: mariadb
     volumes:
       - mariadb-database:/var/lib/mysql
+      - ./backups:/backups
     networks:
       - network
     ports:
       - "3306:3306"
     environment:
-      MARIADB_DATABASE : apopdb
+      MARIADB_DATABASE: apopdb
       MARIADB_USER: example-user
       MARIADB_PASSWORD: example-password
       MARIADB_ROOT_PASSWORD: password
-    
+    command:
+      sh -c "
+      service cron start&&
+      mariadbd -u root"
 
 networks:
   network:
 
 volumes:
   mariadb-database:
+  backups:

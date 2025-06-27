@@ -4,7 +4,7 @@
 <div class="container py-4">
     <div class="p-5 mb-4 bg-body-tertiary rounded-3">
         <h1 class="text-center display-5 fw-bold">설문조사</h1>
-        <p class="text-center fs-4">설문조사를 통해 연구를 도와주세요!</p>
+        <p class="text-center fs-4">QUIPP 설문은 '무증상' 또는 '유증상' 중 하나만 선택하여 진행해주세요.</p>
     </div>
     {% for survey in object_list %}
     <div class="card mb-5">
@@ -23,13 +23,32 @@
                 <div class="d-grid gap-2 mx-auto">
                     <a class="btn btn-primary" href="{% url 'survey:survey-detail' survey.pk %}" role="button">작성하기</a>
                     <a class="btn btn-secondary" href="{% url 'survey:user-survey-list' survey.pk %}" role="button">목록보기</a>
-                    {% if user.is_superuser %}
-                        <a class="btn btn-danger" href="#" role="button">수정하기</a>
-                    {% endif %}
                   </div>
             </div>
         </div>
     </div>
     {% endfor %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; 처음으로</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a>
+                </li>
+            {% endif %}
+            {% for page_num in page_obj.paginator.page_range %}
+                {% if page_obj.number == page_num %}
+                    <li class="page-item active">
+                        {% else %}
+                    <li class="page-item">
+                {% endif %}
+            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">마지막으로 &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>
 {% endblock content %}

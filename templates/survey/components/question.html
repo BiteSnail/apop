@@ -1,50 +1,88 @@
 <figure>
     <blockquote class="blockquote">
-    <p>{{ question.title }}</p>
+        <p>{{ survey_question.question.title }}</p>
     </blockquote>
     <figcaption class="blockquote-footer">
-        {{ question.description }}
+        {{ survey_question.question.description }}
     </figcaption>
-</figure>
-{# 텍스트 입력 #}
-{% if question.type_filed == 0 %}
-    <div class="mb-3">
-        <input type="text" class="form-control" name="{{ question.pk }}" id="{{ question.pk }}" placeholder="텍스트를 입력하세요." required>
-        <label for="{{ question.pk }}" class="form-label"></label>
-    </div>
-{# 숫자 입력 #}
-{% elif question.type_filed == 1 %}
-    <div class="mb-3">
-        <input type="number" class="form-control" name="{{ question.pk }}" id="{{ question.pk }}" placeholder="숫자를 입력하세요." required>
-        <label for="{{ question.pk }}" class="form-label"></label>
-    </div>
-{# Radio 입력 #}
-{% elif question.type_filed == 2 %}
-    {% for answer in question.answers.all %}
-        <div class="form-check form-check-inline mb-3">
-            <input class="form-check-input" type="radio" name="{{ question.pk }}" id="{{ question.pk }}" value="{{ answer.description }}" required>
-            <label class="form-check-label" for="{{ question.pk }}">{{ answer.description }}</label>
+    {# 텍스트 입력 #}
+    {% if survey_question.question.type_filed == 0 %}
+        <div class="mb-3">
+            <input type="text" class="form-control" name="{{ survey_question.question.pk }}"
+                   id="{{ survey_question.question.pk }}" placeholder="텍스트를 입력하세요."
+                   {% if survey_question.mandatory %}required{% endif %}>
+            <label for="{{ survey_question.question.pk }}" class="form-label"></label>
         </div>
-    {% endfor %}
-{# Selection 입력 #}
-{% elif question.type_filed == 3 %}
-    <select class="form-select" name="{{ question.pk }}" aria-label="{{ question.pk }}" required>
-        {% for answer in question.answers.all %}
-            <option value="{{ answer.description }}">{{ answer.description }}</option>
+        {# 숫자 입력 #}
+    {% elif survey_question.question.type_filed == 1 %}
+        <div class="mb-3">
+            <input type="number" class="form-control" name="{{ survey_question.question.pk }}"
+                   id="{{ survey_question.question.pk }}" placeholder="숫자를 입력하세요."
+                   {% if survey_question.mandatory %}required{% endif %}>
+            <label for="{{ survey_question.question.pk }}" class="form-label"></label>
+        </div>
+        {# Radio 입력 #}
+    {% elif survey_question.question.type_filed == 2 %}
+
+        {% for answer in survey_question.question.answers.all %}
+            <div class="form-check form-check-inline mb-3">
+                <input class="form-check-input" type="radio" id="answer_{{ answer.pk }}"
+                       value="{{ answer.description }}"
+                       {% if survey_question.mandatory %}required{% endif %}
+                       {% if answer.is_other %}data-is-other="true"{% endif %}
+                       name="{{ survey_question.question.pk }}">
+                <label class="form-check-label" for="answer_{{ answer.pk }}">{{ answer.description }}</label>
+            </div>
+
+            {# is_other가 True인 답변에 대해 텍스트 입력 필드 표시 #}
+            {% if answer.is_other %}
+                <div id="other_text_div_{{ answer.pk }}" class="mb-3" style="display:none;">
+                    <input type="text" class="form-control" name="text_{{ survey_question.question.pk }}"
+                           id="other_text_{{ answer.pk }}" placeholder="추가 내용을 입력하세요.">
+                </div>
+            {% endif %}
         {% endfor %}
-    </select>
-{# CheckBox 입력 #}
-{% elif question.type_filed == 4 %}
-    {% for answer in question.answers.all %}
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="{{ question.pk }}" id="{{ question.pk }}" value="{{ answer.description }}">
-            <label class="form-check-label" for="{{ question.pk }}">{{ answer.description }}</label>
+
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+
+
+        {# Selection 입력 #}
+    {% elif survey_question.question.type_filed == 3 %}
+        <select class="form-select" name="{{ survey_question.question.pk }}"
+                aria-label="{{ survey_question.question.pk }}" {% if survey_question.mandatory %}required{% endif %}>
+            {% for answer in survey_question.question.answers.all %}
+                <option value="{{ answer.description }}">{{ answer.description }}</option>
+            {% endfor %}
+        </select>
+        {# CheckBox 입력 #}
+    {% elif survey_question.question.type_filed == 4 %}
+        {% for answer in survey_question.question.answers.all %}
+            <div class="form-check form-check-inline mb-3">
+                <input class="form-check-input" type="checkbox" id="answer_{{ answer.pk }}"
+                       value="{{ answer.description }}"
+                       {% if survey_question.mandatory %}is-mandatory="true"{% endif %}
+                       {% if answer.is_other %}data-is-other="true" {% endif %}
+                       name="{{ survey_question.question.pk }}">
+                <label class="form-check-label" for="answer_{{ answer.pk }}">{{ answer.description }}</label>
+            </div>
+            {# is_other가 True인 경우, 텍스트 입력 필드 표시 #}
+            {% if answer.is_other %}
+                <div id="other_text_div_{{ answer.pk }}" class="mb-3" style="display:none;">
+                    <input type="text" class="form-control" name="text_{{ survey_question.question.pk }}"
+                           id="other_text_{{ answer.pk }}" placeholder="기타 내용을 입력하세요.">
+                    <label for="other_text_{{ answer.pk }}" class="form-label"></label>
+                </div>
+            {% endif %}
+        {% endfor %}
+        {# 넓은 텍스트 입력 #}
+    {% elif survey_question.question.type_filed == 5 %}
+        <div class="mb-3">
+            <textarea class="form-control" name="{{ survey_question.question.pk }}"
+                      id="{{ survey_question.question.pk }}" rows="3" placeholder="텍스트를 입력하세요"
+                      {% if survey_question.mandatory %}required{% endif %}></textarea>
+            <label for="{{ survey_question.question.pk }}" class="form-label"></label>
         </div>
-    {% endfor %}
-{# 넓은 텍스트 입력 #}
-{% elif question.type_filed == 5 %}
-    <div class="mb-3">
-        <textarea class="form-control" name="{{ question.pk }}" id="{{ question.pk }}" rows="3" placeholder="텍스트를 입력하세요" required></textarea>
-        <label for="{{ question.pk }}" class="form-label"></label>
-    </div>
-{% endif %}
+    {% endif %}
+</figure>

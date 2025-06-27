@@ -14,7 +14,8 @@ class UserSurvey(models.Model):
         db_comment='user id',
         null=False,
         blank=False,
-        help_text='유저 id'
+        help_text='유저 id',
+        related_name="user_survey"
     )
     survey = models.ForeignKey(
         to='Survey',
@@ -37,6 +38,14 @@ class UserSurvey(models.Model):
         auto_now=True,
         help_text='유저 설문 수정 시간'
     )
+    
+    @property
+    def survey_name(self) -> str:
+        return self.survey.title
+    
+    @property
+    def counts(self) -> int:
+        return UserSurvey.objects.filter(user=self.user, survey=self.survey).count()
 
     class Meta:
         db_table = 'user_survey'

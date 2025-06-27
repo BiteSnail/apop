@@ -1,17 +1,71 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="p-5 mb-4 bg-body-tertiary rounded-3">
-        <h1 class="display-5 fw-bold">{{ object.title }}</h1>
-        <p class="fs-4">{{ object.description }}</p>
+    <div class="container py-4">
+        <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+            <h1 class="display-5 fw-bold">{{ object.title }}</h1>
+            <p class="fs-4">{{ object.description }}</p>
+        </div>
+        <form method="post" onsubmit="return validateCheckBoxes()">
+            {% csrf_token %}
+            {% for survey_question in survey_questions %}
+                {% include 'survey/components/question.html' %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary mt-5">제출하기</button>
+        </form>
     </div>
-    <form method="post">
-        {% csrf_token %}
-        {% for question in object.questions.all %}
-            {% include 'survey/components/question.html' %}
-        {% endfor %}
-        <button type="submit" class="btn btn-primary mt-5">제출하기</button>
-    </form>
-</div>
+    <script>
+        const handleOtherChange = (element) => {
+            const otherTextDiv = document.getElementById(`other_text_div_${element.id.split('_')[1]}`);
+            if (element.checked) {
+                otherTextDiv.style.display = "block";  // 텍스트 입력 필드를 표시
+                otherTextDiv.required = true;
+            } else {
+                otherTextDiv.style.display = "none";   // 텍스트 입력 필드를 숨김
+                otherTextDiv.required = false;
+                otherTextDiv.querySelector('input').value = ''; // 체크 해제 시 입력 필드 초기화
+            }
+        }
+
+        const validateCheckBoxes = () => {
+            const atLeastOneSelect = (name) => {
+                const checkboxes = document.getElementsByName(name)
+                return Array.prototype.slice.call(checkboxes).some((checkbox) => checkbox.checked);
+            }
+            const requiredCheckboxes = document.querySelectorAll('input[type="checkbox"][is-mandatory="true"]:not([data-is-other])')
+            const names = Array.from(new Set(Array.prototype.map.call(requiredCheckboxes, (checkbox) => {
+                return checkbox.name;
+            })))
+            for (let name of names) {
+                if (!atLeastOneSelect(name)) {
+                    alert("하나 이상의 옵션을 선택해야 합니다!")
+                    document.getElementsByName(name)[0].focus()
+                    return false;
+                }
+            }
+            document.querySelectorAll('input[data-is-other="true"]').forEach((otherValue) => {
+                otherValue.value = otherValue.checked ? document.getElementById(`other_text_${otherValue.id.split('_')[1]}`).value : otherValue.value;
+            })
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('input[data-is-other="true"]').forEach((otherSelection) => {
+                // radio 다른 선택지 선택 시 기타 입력칸 제거
+                if (otherSelection.type === "radio") {
+                    document.querySelectorAll(`input[type="radio"][name="${otherSelection.name}"]:not([data-is-other])`)
+                        .forEach((selection) => {
+                            selection.addEventListener('change', () => {
+                                handleOtherChange(otherSelection);
+                            })
+                        })
+                }
+
+                otherSelection.addEventListener('change', () => {
+                    handleOtherChange(otherSelection)
+                })
+            })
+        });
+    </script>
 {% endblock content %}

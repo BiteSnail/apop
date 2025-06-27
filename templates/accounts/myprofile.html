@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="container mt-2">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h4>핏빗 계정 정보</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p><strong>이름:</strong> {{ current_user.fitbit.full_name }}</p>
+                                <p><strong>성별:</strong> {{ current_user.fitbit.gender }}</p>
+                                <p><strong>생년월일:</strong> {{ current_user.fitbit.birthday }}</p>
+                                <p><strong>키:</strong> {{ current_user.fitbit.height }} cm</p>
+                                <p><strong>몸무게:</strong> {{ current_user.fitbit.weight }} kg</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted text-center">
+                        마지막 동기화: {{ current_user.fitbit.last_synced|date:"Y-m-d H:i" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

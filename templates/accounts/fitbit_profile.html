@@ -1,0 +1,28 @@
+<!-- fitbit_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user_profile.user.fullName }}의 Fitbit 프로필</title>
+</head>
+<body>
+    <h1>{{ user_profile.user.fullName }}의 Fitbit 프로필</h1>
+    
+    <!-- 프로필 정보 출력 -->
+    <p><strong>Age:</strong> {{ user_profile.user.age }} </p>
+    <p><strong>Weight:</strong> {{ user_profile.user.weight }} kg</p>
+    <p><strong>Height:</strong> {{ user_profile.user.height }} cm</p>
+    
+    <!-- 기타 프로필 정보 표시 -->
+    <p><strong>Gender:</strong> {{ user_profile.user.gender }}</p>
+    <p><strong>Member Since:</strong> {{ user_profile.user.memberSince }}</p>
+    <p><strong>Locale:</strong> {{ user_profile.user.locale }}</p>
+
+    <!-- 피트니스 관련 추가 정보 -->
+    <p><strong>Step Count Today:</strong> {{ user_profile.user.today.steps }}</p>
+    <p><strong>Calories Burned Today:</strong> {{ user_profile.user.today.calories }} kcal</p>
+
+    <!-- 필요에 따라 추가 데이터 표시 가능 -->
+</body>
+</html>

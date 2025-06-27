@@ -25,7 +25,7 @@ class Question(models.Model):
         null=False,
         blank=False,
         help_text="질문 제목",
-        max_length=40
+        max_length=70
     )
     description = models.TextField(
         db_column="description",

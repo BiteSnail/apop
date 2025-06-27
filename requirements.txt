@@ -1,6 +1,11 @@
-django==4.2.7
+django==5.1.1
 django-extensions==3.2.3
-requests==2.31.0
+requests==2.32.0
 django-bootstrap5==23.3
-gunicorn==21.2.0
+gunicorn==22.0.0
 mysqlclient==2.2.1
+djangorestframework==3.15.2
+drf-spectacular==0.27.1
+django-apscheduler==0.7.0
+openpyxl==2.4.11
+apscheduler==3.11.0

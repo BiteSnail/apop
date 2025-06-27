@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="container mt-2">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h4>계정 정보</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <p><strong>기존 전화번호:</strong> {{ current_user.huami.phone_number }}</p>
+                            <form method="post">{% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-light">변경하기</button>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        document.getElementById('id_phone_number').addEventListener('blur', function (e) {
+            let phoneNumberField = document.getElementById('id_phone_number');
+            phoneNumberField.value = phoneNumberField.value.replace(/\D/g, ''); // 숫자만 남김
+
+            var x = e.target.value.replace(/\D/g, '').match(/(\d{3})(\d{3,4})(\d{4})/);
+            if (x) {
+                e.target.value = x[1] + '-' + x[2] + '-' + x[3];
+            }
+        });
+
+
+    </script>
+    
+{% endblock %}

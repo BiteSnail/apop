@@ -1,41 +1,47 @@
-{% extends 'accounts/base.html' %}
-{# Load the tag library #}
-{% load django_bootstrap5 %}
+    {% extends 'accounts/base.html' %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+    {% load static %}
 
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+    {% block content %}
+    <section class="vh-100 gradient-custom">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+              <div class="card-body p-5 text-center">
+                <div class="mb-md-5 mt-md-4 pb-5">
+                  <h2 class="fw-bold mb-4 text-uppercase" style="font-size: 2rem; line-height: 1.6;">
+                  조기진통감지 및<br>스트레스 완화
+                </h2>
+                  <p class="text-white-50 mb-5">로그인 방법을 선택해주세요</p>
 
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
+                  <!-- 일반 로그인 버튼 -->
+                  <a href="{% url 'accounts:admin_login' %}">
+                    <button class="btn btn-outline-light btn-lg px-5 mb-3" type="button">
+                      관리자 로그인
+                    </button>
+                  </a>
 
-{% load static %}
-
-{% block content %}
-<section class="vh-100 gradient-custom">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="card bg-dark text-white" style="border-radius: 1rem;">
-          <div class="card-body p-5 text-center">
-
-            <div class="mb-md-5 mt-md-4 pb-5">
-              <form method="post" class="form">
-                {% csrf_token %}
-                <h2 class="fw-bold mb-2 text-uppercase">중견연구</h2>
-                <p class="text-white-50 mb-5">로그인 정보를 입력해주세요!</p>
-                {% bootstrap_form form %}
-                <button class="btn btn-outline-light btn-lg px-5" type="submit">로그인하기</button>
-              </form>
-            </div>
-            <div>
-              <p class="mb-0"><a href="{% url 'accounts:signup' %}" class="text-white-50 fw-bold">회원가입</a>
-              </p>
+                  <!-- Fitbit 로그인 버튼 -->
+                  <a href="{% url 'accounts:fitbit_login' %}">
+                    <button class="btn btn-outline-light btn-lg px-5" type="button">
+                      Fitbit으로 로그인
+                    </button>
+                  </a>
+                </div>
+                  <div>
+                  <p class="mb-0">
+                    <a href="{% url 'home' %}" class="text-white-50 fw-bold">홈으로 가기</a>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
       </div>
-    </div>
-  </div>
-</section>
-{% endblock content %}
+    </section>
+    {% endblock content %}

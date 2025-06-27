@@ -1,0 +1,38 @@
+<style>
+    /* 테이블 헤더 호버 효과 */
+    th[data-column]:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    /* 테이블 행 호버 효과 및 클릭 가능 표시 */
+    tr[data-href] {
+        cursor: pointer;
+    }
+
+    tr[data-href]:hover {
+        background-color: #f9f9f9;
+    }
+
+    table {
+        table-layout: auto; /* 테이블 레이아웃을 고정으로 설정 */
+        width: 100%; /* 테이블의 전체 너비를 100%로 설정 */
+    }
+
+    /* 각 열의 너비 설정 */
+    th, td {
+        overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+        text-overflow: ellipsis; /* 넘치는 내용은 ...으로 표시 */
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        text-align: center; /* 내용 가운데 정렬 */
+    }
+
+    /* 행 높이 고정 */
+    tr {
+        height: 50px; /* 각 행의 높이 지정 */
+    }
+
+    .table-responsive {
+        overflow-y: auto; /* 수직 스크롤바 추가 */
+    }
+</style>

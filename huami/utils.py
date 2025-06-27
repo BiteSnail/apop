@@ -385,6 +385,18 @@ class HuamiAmazfit:
             data=_assemble_payload(name='logout', login_token=self.login_token)
         )
         
+    def devices(self) -> json:
+        """디바이스 정보들을 모두 요청
+
+        Returns:
+            json: 디바이스 상태, 시리얼번호, 마지막 동기화 시간 등
+        """
+        return requests.get(
+            url=_assemble_url(name='devices', user_id=self.user_id),
+            params=_assemble_payload(name='devices'),
+            headers={'apptoken': self.app_token}
+        ).json()
+        
     @staticmethod
     def is_valid(email: str, password: str) -> None:
         """Huami 계정이 유효한지 검증

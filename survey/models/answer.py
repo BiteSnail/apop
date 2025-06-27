@@ -25,6 +25,19 @@ class Answer(models.Model):
         auto_now=True,
         help_text='질문 답변의 수정 시간입니다.'
     )
+    value = models.IntegerField(
+        db_column='value',
+        null=True,
+        blank=True,
+        help_text='질문에 값이 존재할 경우 값을 기재합니다.'
+    )
+    is_other = models.BooleanField(
+        db_column="is_other",
+        db_comment="기타 옵션 여부",
+        default=False,
+        help_text="이 응답이 기타 옵션인지 여부"
+    )
+
 
     class Meta:
         db_table = 'answer'

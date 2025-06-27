@@ -22,6 +22,7 @@ app_name = 'apop'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('apop2.apiurls')),
     path('survey/', include('survey.urls')),
     path('accounts/', include('accounts.urls')),
     path('', HomeView.as_view(), name='home'),

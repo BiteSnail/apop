@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from .question import Question
 
 class SurveyQuestion(models.Model):
     """Question과 Survey의 N:M관계 지원을 위한 모델 클래스
@@ -23,6 +23,17 @@ class SurveyQuestion(models.Model):
         help_text="질문 순서",
         validators=[MinValueValidator(1)],
     )
+
+    mandatory = models.BooleanField(
+        default=False,
+        db_column="is_required",
+        db_comment="필수 여부",
+        help_text="이 질문이 응답해야 하는 필수 항목인지 여부",
+
+    )
+
+    def is_mandatory(self):
+        return self.mandatory
     
     def __str__(self) -> str:
         """SurveyQuestion 인스턴스 출력 메서드
@@ -70,6 +81,7 @@ class SurveyQuestion(models.Model):
         survey_question.order, self.order = self.order, survey_question.order
         survey_question.save()
         self.save()
+        survey_question.order.save()
 
     def save(self, *args, **kwargs):
         """순서 번호 자동 설정을 위한 메서드
